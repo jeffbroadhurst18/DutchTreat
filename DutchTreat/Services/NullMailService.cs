@@ -1,14 +1,24 @@
-﻿using System;
+﻿using Microsoft.Extensions.Logging;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace DutchTreat.Services
 {
-	public class NullMailService
+	public class NullMailService : IMailService
 	{
+		private readonly ILogger _logger;
+
+		public NullMailService(ILogger<NullMailService> logger)
+		{
+			_logger = logger;
+		}
+
 		public void SendMessage(string to, string subject, string body)
 		{
+			//Log the Message
+			_logger.LogInformation($"To: {to} Subject: {subject} Body: {body}");
 		}
 	}
 }
