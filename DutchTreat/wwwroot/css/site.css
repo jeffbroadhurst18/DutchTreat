@@ -1,4 +1,5 @@
-﻿body {
+﻿
+/*body {
 	font-family: 'Segoe UI',Tahoma;
 }
 
@@ -28,7 +29,7 @@ ul.product-props {
 	font-size: small;
 }
 	/* note space in line below li contained within ul*/
-	ul.product-props li {
+	/*ul.product-props li {
 		list-style-type: none;
 	}
 
@@ -59,7 +60,7 @@ ul.product-props {
 	display: inline-block; /*makes it as small as is required for the content.*/
 }
 
-	.popup-form input {
+	/*.popup-form input {
 		width: 200px;
 	}
 
@@ -68,7 +69,7 @@ ul.product-props {
 		display: inline-block; /*required otherwise only displays as the width of the text.*/
 	}
 
-	.popup-form input[type=checkbox], .popup-form input[type=submit] {
+	/*.popup-form input[type=checkbox], .popup-form input[type=submit] {
 		width: auto;
 	}
 
@@ -82,4 +83,4 @@ ul.product-props {
 
 	menu li:last-of-type::after {
 		content: " ";
-	}
+	}*/
