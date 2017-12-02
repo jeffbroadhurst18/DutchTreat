@@ -1,0 +1,11 @@
+﻿{
+	"ConnectionStrings": {
+		"DutchConnectionString": "Server=BROADHURST_WIN8\\BROADHURST;Database=DutchTreat;Trusted_Connection=True;MultipleActiveResultSets=true;"
+	},
+	"Logging": {
+		"LogLevel": {
+					"Default": "Information",
+					"Microsoft": "Warning"
+		}
+	}
+}
