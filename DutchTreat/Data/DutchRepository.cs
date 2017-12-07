@@ -18,11 +18,24 @@ namespace DutchTreat.Data
 			_logger = logger;
 		}
 
-		public IEnumerable<Order> GetAllOrders()
+		public void AddEntity(object model)
 		{
-			var result = _ctx.Orders.Include(c => c.Items).ThenInclude(v => v.Product).ToList();
-			return result;
-			//includes data from join
+			_ctx.Add(model); //The context can work out which type the object is and save it appropriately.
+		}
+
+		public IEnumerable<Order> GetAllOrders(bool includeItems)
+		{
+			if (includeItems)
+			{
+				var result = _ctx.Orders.Include(c => c.Items).ThenInclude(v => v.Product).ToList();
+				return result;
+				//includes data from join
+			}
+			else
+			{
+				var result = _ctx.Orders.ToList();
+				return result;
+			}
 		}
 
 		public IEnumerable<Product> GetAllProducts()

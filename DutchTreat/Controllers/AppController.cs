@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using DutchTreat.ViewModels;
 using DutchTreat.Services;
 using DutchTreat.Data;
+using Microsoft.AspNetCore.Authorization;
 
 namespace DutchTreat.Controllers
 {
@@ -50,6 +51,7 @@ namespace DutchTreat.Controllers
 			return View();
 		}
 
+		[Authorize]
 		public IActionResult Shop()
 		{
 			//var results = _context.Products.OrderBy(p => p.Category).ToList();
