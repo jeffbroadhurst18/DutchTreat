@@ -12,15 +12,20 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using AutoMapper;
+using DutchTreat.Data.Entities;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 
 namespace DutchTreat
 {
     public class Startup
     {
 		private readonly IConfiguration _config;
+		private readonly IHostingEnvironment _env;
 
-		public Startup(IConfiguration config) {
+		public Startup(IConfiguration config, IHostingEnvironment env) {
 			_config = config;
+			_env = env;
 		}
 
 
@@ -28,6 +33,10 @@ namespace DutchTreat
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
+			services.AddIdentity<StoreUser, IdentityRole>(
+				cfg => { cfg.User.RequireUniqueEmail = true; }).
+				AddEntityFrameworkStores<DutchContext>();
+
 			services.AddDbContext<DutchContext>(cfg => {
 				cfg.UseSqlServer(_config.GetConnectionString("DutchConnectionString"));
 			});
@@ -40,7 +49,12 @@ namespace DutchTreat
 			services.AddScoped<IDutchRepository, DutchRepository>(); // interface then actual implementation
 
 			//Dependency injection mandatory;
-			services.AddMvc().AddJsonOptions(opt => opt.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore);
+			services.AddMvc(opt => {
+				if (_env.IsProduction())
+				{
+					opt.Filters.Add(new RequireHttpsAttribute());//adds https on whole site
+				}
+			}).AddJsonOptions(opt => opt.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore);
 			//=> bit stopd infinite loop when reading order orderitem order etc
         }
 
@@ -57,6 +71,9 @@ namespace DutchTreat
 			}
 			//app.UseDefaultFiles();//means you don't have to specify index.html - commented as not required for mvc
 			app.UseStaticFiles();//Can serve static files
+
+			app.UseAuthentication(); //Needs to go before MVC as MVC needs identity.
+
 			app.UseMvc(cfg =>
 				cfg.MapRoute("Default", "{controller}/{action}/{id?}",
 				new { controller = "App", Action = "Index" })); //Default page
@@ -66,7 +83,8 @@ namespace DutchTreat
 				using (var scope = app.ApplicationServices.CreateScope())
 				{
 					var seeder = scope.ServiceProvider.GetService<DutchSeeder>();
-					seeder.Seed();
+					seeder.Seed().Wait(); ; //seeder is async .Wait waits for it to finish without making 
+					// the whole method async.
 				}
 			}
         }

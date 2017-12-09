@@ -8,7 +8,7 @@ namespace DutchTreat.Data.Entities
 {
     public class StoreUser: IdentityUser
     {
-		public int FirstName { get; set; }
-		public int LastName { get; set; }
+		public string FirstName { get; set; }
+		public string LastName { get; set; }
 	}
 }
