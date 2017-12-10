@@ -9,11 +9,14 @@ using Microsoft.Extensions.Logging;
 using DutchTreat.Data.Entities;
 using DutchTreat.ViewModels;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 
 namespace DutchTreat.Controllers
 {
 	[Produces("application/json")]
-	[Route("api/Orders")]
+	[Route("api/[Controller]")]
+	[Authorize(AuthenticationSchemes =JwtBearerDefaults.AuthenticationScheme)]
 	public class OrdersController : Controller
 	{
 		private readonly IDutchRepository _repository;
@@ -32,7 +35,9 @@ namespace DutchTreat.Controllers
 		{
 			try
 			{
-				var results = _repository.GetAllOrders(includeItems);
+				var username = User.Identity.Name;
+
+				var results = _repository.GetAllOrdersByUser(username,includeItems);
 				return Ok(_mapper.Map<IEnumerable<Order>, IEnumerable<OrderViewModel>>(results));
 			}
 			catch (Exception ex)
@@ -48,7 +53,7 @@ namespace DutchTreat.Controllers
 		{
 			try
 			{
-				var order = _repository.GetOrderById(id);
+				var order = _repository.GetOrderById(User.Identity.Name, id);
 				if (order != null)
 				{
 					return Ok(Mapper.Map<Order, OrderViewModel>(order));

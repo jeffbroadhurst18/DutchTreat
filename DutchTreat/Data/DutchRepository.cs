@@ -38,6 +38,21 @@ namespace DutchTreat.Data
 			}
 		}
 
+		public IEnumerable<Order> GetAllOrdersByUser(string username, bool includeItems)
+		{
+			if (includeItems)
+			{
+				var result = _ctx.Orders.Where(l => l.User.UserName == username).Include(c => c.Items).ThenInclude(v => v.Product).ToList();
+				return result;
+				//includes data from join
+			}
+			else
+			{
+				var result = _ctx.Orders.Where(l => l.User.UserName == username).ToList();
+				return result;
+			}
+		}
+
 		public IEnumerable<Product> GetAllProducts()
 		{
 			try
@@ -59,6 +74,21 @@ namespace DutchTreat.Data
 			{
 				return _ctx.Orders.Include(b => b.Items)
 					.ThenInclude(r => r.Product).Where(o => o.Id == id)
+					.FirstOrDefault();
+			}
+			catch (Exception ex)
+			{
+				_logger.LogError($"Failed to get order: {ex.Message} {ex.StackTrace}");
+				return null;
+			}
+		}
+
+		public Order GetOrderById(string name, int orderId)
+		{
+			try
+			{
+				return _ctx.Orders.Include(b => b.Items)
+					.ThenInclude(r => r.Product).Where(o => o.Id == orderId && o.User.UserName == name)
 					.FirstOrDefault();
 			}
 			catch (Exception ex)

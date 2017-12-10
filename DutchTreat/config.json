@@ -4,8 +4,14 @@
 	},
 	"Logging": {
 		"LogLevel": {
-					"Default": "Information",
-					"Microsoft": "Warning"
+			"Default": "Information",
+			"Microsoft": "Warning"
 		}
+	},
+	"Tokens": {
+		"Key": "a:poe,;affkg-poaejger';;.",
+			"Issuer": "localhost",
+			"Audience": ""
+
 	}
 }
