@@ -11,7 +11,7 @@
 	"Tokens": {
 		"Key": "a:poe,;affkg-poaejger';;.",
 			"Issuer": "localhost",
-			"Audience": ""
+			"Audience": "localhost"
 
 	}
 }
