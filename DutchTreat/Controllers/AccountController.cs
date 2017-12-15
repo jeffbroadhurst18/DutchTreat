@@ -56,12 +56,13 @@ namespace DutchTreat.Controllers
 
 				if (result.Succeeded)
 				{
-					if (Request.Query.Keys.Contains("ReturnUrl")){
+					if (Request.Query.Keys.Contains("ReturnUrl"))
+					{
 						Redirect(Request.Query["ReturnUrl"].First());
 					}
 					else
 					{
-						RedirectToAction("Shop", "App");
+						return RedirectToAction("Shop", "App");
 					}
 				}
 			}
