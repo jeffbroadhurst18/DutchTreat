@@ -7,18 +7,28 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var core_1 = require("@angular/core");
-var AppComponent = (function () {
-    function AppComponent() {
-        this.title = 'Product List';
+var ProductList = (function () {
+    function ProductList() {
+        this.products = [{
+                title: "First Product",
+                price: 19.99
+            }, {
+                title: "Second Product",
+                price: 9.99
+            }, {
+                title: "Third Product",
+                price: 29.99
+            }
+        ];
     }
-    return AppComponent;
+    return ProductList;
 }());
-AppComponent = __decorate([
+ProductList = __decorate([
     core_1.Component({
-        selector: 'the-shop',
-        templateUrl: "./app.component.html",
-        styles: []
+        selector: "product-list",
+        templateUrl: "productList.component.html",
+        styleUrls: []
     })
-], AppComponent);
-exports.AppComponent = AppComponent;
-//# sourceMappingURL=app.component.js.map
+], ProductList);
+exports.ProductList = ProductList;
+//# sourceMappingURL=productList.component.js.map
