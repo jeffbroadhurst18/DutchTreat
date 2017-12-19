@@ -25,6 +25,9 @@ var ProductList = (function () {
             }
         });
     };
+    ProductList.prototype.addProduct = function (product) {
+        this.data.AddToOrder(product);
+    };
     return ProductList;
 }());
 ProductList = __decorate([

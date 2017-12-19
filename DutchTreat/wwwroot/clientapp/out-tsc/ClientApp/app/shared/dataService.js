@@ -11,10 +11,12 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var http_1 = require("@angular/http");
 var core_1 = require("@angular/core");
+var order_1 = require("./order");
 require("rxjs/add/operator/map");
 var DataService = (function () {
     function DataService(http) {
         this.http = http;
+        this.order = new order_1.Order();
         this.products = [];
     }
     DataService.prototype.loadProducts = function () {
@@ -23,6 +25,24 @@ var DataService = (function () {
             .map(function (result) {
             return _this.products = result.json();
         });
+    };
+    DataService.prototype.AddToOrder = function (product) {
+        var item = this.order.items.find(function (i) { return i.productId == product.id; });
+        if (this.order.items) {
+            item.quantity++;
+        }
+        else {
+            item = new order_1.OrderItem();
+            item.productId = product.id;
+            item.productArtist = product.artist;
+            item.productCategory = product.category;
+            item.productArtId = product.artId;
+            item.productTitle = product.title;
+            item.productSize = product.size;
+            item.unitPrice = product.price;
+            item.quantity = 1;
+            this.order.items.push(item);
+        }
     };
     return DataService;
 }());

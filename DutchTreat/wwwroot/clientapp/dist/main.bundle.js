@@ -113,7 +113,8 @@ var AppModule = (function () {
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return DataService; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_http__ = __webpack_require__("../../../http/esm5/http.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_core__ = __webpack_require__("../../../core/esm5/core.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_rxjs_add_operator_map__ = __webpack_require__("../../../../rxjs/_esm5/add/operator/map.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__order__ = __webpack_require__("../../../../../ClientApp/app/shared/order.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_rxjs_add_operator_map__ = __webpack_require__("../../../../rxjs/_esm5/add/operator/map.js");
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -126,9 +127,11 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 
 
 
+
 var DataService = (function () {
     function DataService(http) {
         this.http = http;
+        this.order = new __WEBPACK_IMPORTED_MODULE_2__order__["a" /* Order */]();
         this.products = [];
     }
     DataService.prototype.loadProducts = function () {
@@ -137,6 +140,24 @@ var DataService = (function () {
             .map(function (result) {
             return _this.products = result.json();
         });
+    };
+    DataService.prototype.AddToOrder = function (product) {
+        var item = this.order.items.find(function (i) { return i.productId == product.id; });
+        if (item) {
+            item.quantity++;
+        }
+        else {
+            item = new __WEBPACK_IMPORTED_MODULE_2__order__["b" /* OrderItem */]();
+            item.productId = product.id;
+            item.productArtist = product.artist;
+            item.productCategory = product.category;
+            item.productArtId = product.artId;
+            item.productTitle = product.title;
+            item.productSize = product.size;
+            item.unitPrice = product.price;
+            item.quantity = 1;
+            this.order.items.push(item);
+        }
     };
     DataService = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_1__angular_core__["w" /* Injectable */])(),
@@ -149,10 +170,34 @@ var DataService = (function () {
 
 /***/ }),
 
+/***/ "../../../../../ClientApp/app/shared/order.ts":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return Order; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return OrderItem; });
+var Order = (function () {
+    function Order() {
+        this.orderDate = new Date();
+        this.items = new Array();
+    }
+    return Order;
+}());
+
+var OrderItem = (function () {
+    function OrderItem() {
+    }
+    return OrderItem;
+}());
+
+
+
+/***/ }),
+
 /***/ "../../../../../ClientApp/app/shop/cart.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<h3>Shopping Cart</h3>"
+module.exports = "<h3>Shopping Cart</h3>\r\n<div>No. of Items: {{ data.order.items.length }}</div>\r\n<table class=\"table table-condensed table-hover\">\r\n\t<thead>\r\n\t\t<tr>\r\n\t\t\t<td>Product</td>\r\n\t\t\t<td>#</td>\r\n\t\t\t<td>£</td>\r\n\t\t\t<td>Total</td>\r\n\t\t</tr>\r\n\t</thead>\r\n\t<tbody>\r\n\t\t<tr *ngFor=\"let o of data.order.items\">\r\n\t\t\t<td>{{o.productCategory}} - {{o.productTitle}}</td>\r\n\t\t\t<td>{{o.quantity}}</td>\r\n\t\t\t<td>{{o.unitPrice | currency:\"GBP\":\"symbol-narrow\"}}</td>\r\n\t\t\t<td>{{(o.unitPrice * o.quantity) | currency:\"GBP\":\"symbol-narrow\"}}</td>\r\n\t\t</tr>\r\n\t</tbody>\r\n</table>"
 
 /***/ }),
 
@@ -214,7 +259,7 @@ module.exports = module.exports.toString();
 /***/ "../../../../../ClientApp/app/shop/productList.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"row\">\r\n\t<div class=\"product-info col-md-4 well well-sm\" *ngFor=\"let p of products\">\r\n\t\t<img src=\"/img/{{p.artId}}.jpg\" class=\"img-responsive\" [alt]=\"p.title\"/>\r\n\t\t<div class=\"product-name\">{{p.category}} - {{p.size}}</div>\r\n\t\t<div><strong>Price: </strong>{{p.price | currency:\"GBP\":true}}</div>\r\n\t\t<div><strong>Artist: </strong>{{p.artist}}</div>\r\n\t\t<div><strong>Title: </strong>{{p.title}}</div>\r\n\t\t<div><strong>Description: </strong>{{p.artDescription}}</div>\r\n\t\t<button id=\"buyButton\" class=\"btn btn-success btn-sm pull-right\">Buy</button>\r\n\t</div>\r\n</div>\r\n\r\n<!--Can have the ngFor on a div.-->"
+module.exports = "<div class=\"row\">\r\n\t<div class=\"product-info col-md-4 well well-sm\" *ngFor=\"let p of products\">\r\n\t\t<img src=\"/img/{{p.artId}}.jpg\" class=\"img-responsive\" [alt]=\"p.title\"/>\r\n\t\t<div class=\"product-name\">{{p.category}} - {{p.size}}</div>\r\n\t\t<div><strong>Price: </strong>{{p.price | currency:\"GBP\":true}}</div>\r\n\t\t<div><strong>Artist: </strong>{{p.artist}}</div>\r\n\t\t<div><strong>Title: </strong>{{p.title}}</div>\r\n\t\t<div><strong>Description: </strong>{{p.artDescription}}</div>\r\n\t\t<button id=\"buyButton\" class=\"btn btn-success btn-sm pull-right\" (click)=\"addProduct(p)\">Buy</button>\r\n\t</div>\r\n</div>\r\n\r\n<!--Can have the ngFor on a div.-->"
 
 /***/ }),
 
@@ -249,6 +294,9 @@ var ProductList = (function () {
                 _this.products = _this.data.products;
             }
         });
+    };
+    ProductList.prototype.addProduct = function (product) {
+        this.data.AddToOrder(product);
     };
     ProductList = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["m" /* Component */])({

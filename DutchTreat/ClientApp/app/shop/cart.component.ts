@@ -8,7 +8,9 @@ styleUrls: []
 
 })
 export class Cart {
-	constructor(private data: DataService) { }
+	constructor(private data: DataService) {
+	
+	}
 
-
+	
 }
