@@ -28,7 +28,7 @@ var DataService = (function () {
     };
     DataService.prototype.AddToOrder = function (product) {
         var item = this.order.items.find(function (i) { return i.productId == product.id; });
-        if (this.order.items) {
+        if (item) {
             item.quantity++;
         }
         else {
