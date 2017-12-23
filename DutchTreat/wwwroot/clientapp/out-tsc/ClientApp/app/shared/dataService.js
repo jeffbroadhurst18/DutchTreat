@@ -16,6 +16,7 @@ require("rxjs/add/operator/map");
 var DataService = (function () {
     function DataService(http) {
         this.http = http;
+        this.token = "";
         this.order = new order_1.Order();
         this.products = [];
     }
@@ -26,6 +27,14 @@ var DataService = (function () {
             return _this.products = result.json();
         });
     };
+    Object.defineProperty(DataService.prototype, "loginRequired", {
+        get: function () {
+            return this.token.length == 0 || this.tokenExpiration < new Date();
+        } // Either token doesn't exist or has expired.
+        ,
+        enumerable: true,
+        configurable: true
+    });
     DataService.prototype.AddToOrder = function (product) {
         var item = this.order.items.find(function (i) { return i.productId == product.id; });
         if (item) {

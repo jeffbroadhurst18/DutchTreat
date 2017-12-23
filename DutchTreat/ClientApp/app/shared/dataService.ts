@@ -8,7 +8,11 @@ import 'rxjs/add/operator/map';
 @Injectable()
 export class DataService {
 
-	constructor(private http: Http) { }
+    constructor(private http: Http) { }
+
+    private token: string = "";
+
+    private tokenExpiration: Date;
 
 	public order: Order = new Order();
 
@@ -19,6 +23,10 @@ export class DataService {
 			.map((result: Response) =>
 				this.products = result.json());
 	}
+
+    public get loginRequired(): boolean {
+        return this.token.length == 0 || this.tokenExpiration < new Date();
+    } // Either token doesn't exist or has expired.
 
 	public AddToOrder(product: Product) {
 		
