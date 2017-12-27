@@ -12,13 +12,26 @@ export class Login {
 
     }
 
+    errorMessage: string = "";
     public creds = {
         username:"",
         password:""
     };
 
     onLogin() {
-        alert(this.creds.username);
-		//Test
+        this.data.login(this.creds)
+            .subscribe(success => {
+                if (success) {
+                    if (this.data.order.items.length == 0) {
+                        this.router.navigate([""]); //if no orders then go to route
+                    } else {
+                        this.router.navigate(["checkout"]);
+                    }
+                }
+            },
+            err => this.errorMessage = "Failed to Login");
+
+       
+		//Two way binding is reflected on the form.
     }
 }

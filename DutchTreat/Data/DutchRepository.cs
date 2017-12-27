@@ -23,6 +23,16 @@ namespace DutchTreat.Data
 			_ctx.Add(model); //The context can work out which type the object is and save it appropriately.
 		}
 
+		public void AddOrder(Order newOrder)
+		{
+			//Convert new product to lookup of product
+			foreach(var item in newOrder.Items)
+			{
+				item.Product = _ctx.Products.Find(item.Product.Id);
+			}
+			AddEntity(newOrder);
+		}
+
 		public IEnumerable<Order> GetAllOrders(bool includeItems)
 		{
 			if (includeItems)

@@ -1,4 +1,4 @@
-﻿import { Http,Response } from "@angular/http";
+﻿import { Http,Response,Headers } from "@angular/http";
 import { Injectable } from "@angular/core";
 import { Observable } from "rxjs";
 import { Product } from "./product";
@@ -27,6 +27,29 @@ export class DataService {
     public get loginRequired(): boolean {
         return this.token.length == 0 || this.tokenExpiration < new Date();
     } // Either token doesn't exist or has expired.
+
+    public login(creds) {
+        return this.http.post("/account/createtoken", creds)
+            .map(response => {
+                let tokenInfo = response.json();
+                this.token = tokenInfo.token;
+                this.tokenExpiration = tokenInfo.expiration;
+                return true;
+            })
+    }
+
+    public checkout() {
+        if (!this.order.orderNumber) {
+            this.order.orderNumber = this.order.orderDate.getFullYear().toString() + this.order.orderDate.getTime().toString();
+        }
+        return this.http.post("/api/orders", this.order, {
+            headers: new Headers({ "Authorization": "Bearer " + this.token})
+        })
+            .map(response => {
+                this.order = new Order(); //Create new order
+                return true;
+            });
+    }
 
 	public AddToOrder(product: Product) {
 		
