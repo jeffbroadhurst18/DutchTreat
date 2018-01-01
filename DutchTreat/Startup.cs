@@ -58,7 +58,7 @@ namespace DutchTreat
 
 			//Dependency injection mandatory;
 			services.AddMvc(opt => {
-				if (_env.IsProduction())
+				if (_env.IsProduction() && _config["DisableSSL"] != "true")
 				{
 					opt.Filters.Add(new RequireHttpsAttribute());//adds https on whole site
 				}
