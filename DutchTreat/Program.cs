@@ -1,27 +1,35 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Logging;
+using NLog.Web;
 
 namespace DutchTreat
 {
-    public class Program
+	public class Program
     {
         public static void Main(string[] args)
         {
-            BuildWebHost(args).Run();
-        }
+			var logger = NLogBuilder.ConfigureNLog("NLog.config").GetCurrentClassLogger();
+			try
+			{
+				logger.Debug("init main");
+				BuildWebHost(args).Run();
+			}
+			catch (Exception e)
+			{
+				//NLog: catch setup errors
+				logger.Error(e, "Stopped program because of exception");
+				throw;
+			}
+		}
 
         public static IWebHost BuildWebHost(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
 			.ConfigureAppConfiguration(SetupConfiguration)
-                .UseStartup<Startup>()
-                .Build();
+				.UseStartup<Startup>()
+			.UseNLog()
+				.Build();
 
 		private static void SetupConfiguration(WebHostBuilderContext ctx, IConfigurationBuilder builder)
 		{
